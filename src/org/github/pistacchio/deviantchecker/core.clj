@@ -35,10 +35,6 @@
 
 ;; ** views ** ;;
 
-(defmacro apply-errors
-  [tpl & errors]
-  )
-
 (defn get-home
   "GET /"
   [& error-message]
@@ -68,24 +64,6 @@
             (get-home))
           (get-home :div#error-new-gallery "Gallery not found"))
         (get-home :div#error-new-gallery "Gallery already added.")))))
-
-(empty? (filter #(= (% :href) "http://timberwolf0316.deviantart.com") (load-data)))
-
-(comment (defn add-gallery
-  "adds a a new gallery with gallery url to the list of galleries if gallery-url is not empty and the url is not added
- already."
-  [gallery-url]
-  (let [current-data (load-data)]
-    (if
-      (and
-        (not (empty? gallery-url))
-        (empty? (filter #(= (% :href) gallery-url) current-data)))
-      (if-let [gallery-data (gallery-info gallery-url)]
-        (do
-          (save-data (conj current-data gallery-data))
-          (get-home))
-        (get-home :div#error-new-gallery "Gallery not found"))
-      (get-home :div#error-new-gallery "Gallery already added.")))))
 
 (defn delete-gallery
   "adds a a new gallery with gallery url to the list of galleries if gallery-url is not empty and the url is not added
