@@ -1,25 +1,55 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
     <title>Deviant Scraper</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        function check_updates() {
+            $('a.url').each(function(i) {
+                var link = $(this);
+                link.nextAll('span.new').html('<img src="/loading.gif" />');
+
+                $.ajax({
+                    url: '/check?d=' + $(this).text(),
+                    success: function(data) {
+                        var t = '';
+                        if (data.updated == 'YES') { t = 'new stuff!'; }
+                        link.nextAll('span.new').text(t);
+                    },
+                    dataType: 'json',
+                    error: function() { link.nextAll('span.new').text('') }
+                });
+            });
+        }
+    </script>
+    <style type="text/css">
+        span.new img
+        {
+            vertical-align: center;
+        }
+    </style>
 </head>
 <body>
     <h1>Deviant Scraper</h1>
     <h2>A minimal, personal deviantart.com gallery checker</h2>
-    <p>
-        <h3>My watched galleries:</h3>
+    <div>
+        <input type="button" onclick="javascript:check_updates();" value="Check for updates" />
+    </div>
+
+    <h3>My watched galleries:</h3>
+    <div>
         <ul id="galleries">
-            <li class="gallery"><a class="url" href="#"></a> (<a class="delete" href="#">delete</a>)</li>
+            <li class="gallery"><a class="url" href="#"></a> (<a class="delete" href="#">delete</a>) <span class="new"></span></li>
         </ul>
-    </p>
-    <p>
-        <h3>Add new gallery</h3>
+    </div>
+
+    <h3>Add new gallery</h3>
+    <div>
         <div id="error-new-gallery"></div>
         <form method="get" action="/add">
             Gallery Url: <input type="text" name="d" />
-            <input type="Submit" value="Add">
+            <input type="Submit" value="Add" />
         </form>
-    </p>
+    </div>
 </body>
 </html>

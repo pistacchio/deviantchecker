@@ -30,7 +30,9 @@
     http://username.deviantart.com/gallery |
     http://username.deviantart.com/gallery/?offset=123] => http://username.deviantart.com/gallery"
   [string]
-  (let [s (apply str (if (= (last string) \/) (drop-last 1 string) string))  ;; removes trailing "/" if any
+  (let [chars-to-string #(apply str %)
+        trimmed-s (.trim string)
+        s (chars-to-string (if (= (last trimmed-s) \/) (drop-last 1 trimmed-s) trimmed-s)) ; removes trailing "/" if any
         s-offset (re-find #"(^.*?)\/\?offset=\d+" s)] ;; searches for ending /?offset=NUMBER
     (if (.startsWith s "http://")
       (if (.endsWith s "gallery")
@@ -39,6 +41,8 @@
           (str s "/gallery")
           (second s-offset)))
       (str "http://" s ".deviantart.com/gallery"))))
+
+(normalize-url "http://username.deviantart.com/gallery/")
 
 (defn gallery-info
   "given a string (deviantart user page, username or gallery page, returns a map with the base url, the url of the last
