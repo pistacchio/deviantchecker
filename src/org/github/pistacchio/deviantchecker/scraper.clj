@@ -13,11 +13,18 @@
   [gallery-url]
   (let [last-page-url-selector [:div.pagination :ul.pages :li.number :a]
         last-page-url (-> (select (enlive-slurp-page gallery-url) last-page-url-selector)
-      last :attrs :href) ;; /gallery/offset=2
+                          last :attrs :href) ;; /gallery/offset=2
         last-page-offset (if (seq last-page-url) (last (.split #"/" last-page-url)) nil)] ;; offset=2 ]
     (str gallery-url "/" last-page-offset)))
 
-(defn- normalize-url
+(defn- images-on-last-page
+  "given the url of the last page of a gallery, returns the number of images"
+  [last-page-url]
+  (let [image-selector [:div#gmi-ResourceStream :img]]
+    (count (select (enlive-slurp-page last-page-url) image-selector))))
+
+;; ** main methods ** ;;
+(defn normalize-url
   "[username |
     http://username.deviantart.com |
     http://username.deviantart.com/gallery |
@@ -33,19 +40,12 @@
           (second s-offset)))
       (str "http://" s ".deviantart.com/gallery"))))
 
-(defn- images-on-last-page
-  "given the url of the last page of a gallery, returns the number of images"
-  [last-page-url]
-  (let [image-selector [:div#gmi-ResourceStream :img]]
-    (count (select (enlive-slurp-page last-page-url) image-selector))))
-
-;; ** main methods ** ;;
-
 (defn gallery-info
   "given a string (deviantart user page, username or gallery page, returns a map with the base url, the url of the last
  page and the number of images on the last page"
-  [gallery]
-  (let [gallery-url (normalize-url gallery)
-        last-page (last-page-gallery-url gallery-url)
-        num-images (images-on-last-page last-page)]
-    {:href gallery-url :last-page last-page :num-images (str num-images)}))
+  [gallery-url]
+  (try
+    (let [last-page (last-page-gallery-url gallery-url)
+          num-images (images-on-last-page last-page)]
+      {:href gallery-url :last-page last-page :num-images (str num-images)})
+  (catch java.io.FileNotFoundException e nil)))
