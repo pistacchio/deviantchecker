@@ -19,7 +19,7 @@ As said, this is something you can already do by registering to Deviantart and f
 
 This is how the final application looks like:
 
-![deviantSCRAPER screenshot](/images/screenshot.jpeg) 
+![deviantSCRAPER screenshot](http://cloud.github.com/downloads/pistacchio/org.github.pistacchio.deviantchecker/app-screenshot.png) 
 
 ### What you need to know
 
@@ -39,7 +39,8 @@ This starts a server running on your machine on the port 3000, so you can visit 
 
 The final project structure looks like this:
 
-![deviantSCRAPER structure](/images/structure.jpeg) 
+![file tree](http://cloud.github.com/downloads/pistacchio/org.github.pistacchio.deviantchecker/app-tree.png)    
+
 
 The heart of our application are the two Clojure files in `/src/org/github/pistacchio/deviantchecker`. `/resources` contains the static files for the page under `/resources/public`, our template files (actually only one!) in `/resources/tpl` and our "database": `/resources/data/data.dat`.
 
@@ -83,14 +84,14 @@ The whole web part of our application is contained within `/src/org/github/pista
                 [compojure.handler :as handler])
       (:gen-class))
 
-Together with `compojure`, the Ring Jetty adapter we've talked about, we are going to need:
+Together with `compojure`, the Ring Jetty adapter we've talked about, we are going to need:
 
-* the _json encoder_ from `clojure.contrib` (used for our [Ajax](http://en.wikipedia.org/wiki/Ajax_(programming)) calls)
+* the _json encoder_ from `clojure.contrib` (used for our [Ajax](http://en.wikipedia.org/wiki/Ajax_(programming)) calls)
 * Enlive
-* `compojure.route` for defining the way calls to the server are handled
+* `compojure.route` for defining the way calls to the server are handled
 * `compojure.handler` that has some utility functions for wrapping we are going to use.
 
-Finally, we are using `org.github.pistacchio.deviantchecker.scraper`, our functions for scraping Deviantart, and `(:gen-class)` for making a Java class out of our namespace. This, together with the definition of the main method at the end of the file `(defn -main [& args] (run-jetty app {:port 3000}))` makes us possibile to specify this as the principal class for our project (remember `:main org.github.pistacchio.deviantchecker.core` in `project.clj`?)
+Finally, we are using `org.github.pistacchio.deviantchecker.scraper`, our functions for scraping Deviantart, and `(:gen-class)` for making a Java class out of our namespace. This, together with the definition of the main method at the end of the file `(defn -main [& args] (run-jetty app {:port 3000}))` makes us possibile to specify this as the principal class for our project (remember `:main org.github.pistacchio.deviantchecker.core` in `project.clj`?)
 
 #### (defn -main)
 
@@ -130,7 +131,7 @@ With the third argument we can deconstruct the _request_ object. It is a map wit
 
 How come that in our application we can obtain parameters out of a GET request if I told that only POST params are passed? And what's with `[d]`? Remember tha we've wrapped up our routes with `(api)`? It lets us treat GET parameters (querystring) just like POST params. Moreover, it expands `:params` so that you can deconstruct its keys directly, and that's why `(GET "/add" [d] (add-gallery d))` is possible. Whenever you visit `http://127.0.0.1:3000/add?d=http://e-lite.deviantart.com` our route handler calls `(add-gallery "http://e-lite.deviantart.com")`.
 
-We can be a bit more specific about our routes because they're threated as regex, so, for example, `(GET "*" [] "hello")` will return "hello" no matter what page you visit or `(GET "/valid/number\d+" [] "hello")` will accept a call to `http://127:0.0.1:3000/valid/number/123` but not to `http://127:0.0.1:3000/valid/number/bob`.
+We can be a bit more specific about our routes because they're threated as regex, so, for example, `(GET "*" [] "hello")` will return "hello" no matter what page you visit or `(GET "/valid/number\d+" [] "hello")` will accept a call to `http://127:0.0.1:3000/valid/number/123` but not to `http://127:0.0.1:3000/valid/number/bob`.
 
 Finally, you can get useful information out of the url itself:
 
@@ -179,11 +180,11 @@ Since we are doing some page scraping and Enlive is both a template engine and a
 
 #### Loading html
 
-If you look at `/resources/tpl/home.html`, you'll find out that it's just plain html. We'll take a look at `(get-home)` to see how we use Enlive. The key function call is
+If you look at `/resources/tpl/home.html`, you'll find out that it's just plain html. We'll take a look at `(get-home)` to see how we use Enlive. The key function call is
 
     (html-resource (java.io.File. "resources/tpl/home.html")
 
-This gives us back a parsed version of our html file. Basically `net.cgrand.enlive-html/html-resource` conversts the html file into a Clojure structure made of sequences and maps. For example, if you try to parse a file like
+This gives us back a parsed version of our html file. Basically `net.cgrand.enlive-html/html-resource` conversts the html file into a Clojure structure made of sequences and maps. For example, if you try to parse a file like
 
     <html>
         <div class="test">
@@ -215,11 +216,11 @@ In `(get-home)` we have the following transformation:
 
 `(transform)` accepts a template structure like the one you can get with `(html-resource)`, a _selector_ and a _transformations_. Selectors are shaped on [css selectors](http://shivasoft.in/blog/webtech/complete-css-selector-tutorial-for-the-beginners/), `[:li.gallery]`, for example, selects a `<li>` element whose class is _gallery_.
 
-The transformatiom function we are going to use is `(clone-for)`. It "clones" what we've selected and reproduces it multiple times, once for every element contained in sequence `data` and binds it to `g`. `(clone-for)` accepts multiple selectors and a transformations. The two selectors that we use are `(set-attr)` (we set the `href` attribute of two `<a>` tags and the content of one of them with `(content)`. You can learn a lot more about Enlive transformations in this [helpful tutorial](https://github.com/cgrand/enlive/wiki/Table-and-Layout-Tutorial,-Part-1:-The-Goal).
+The transformatiom function we are going to use is `(clone-for)`. It "clones" what we've selected and reproduces it multiple times, once for every element contained in sequence `data` and binds it to `g`. `(clone-for)` accepts multiple selectors and a transformations. The two selectors that we use are `(set-attr)` (we set the `href` attribute of two `<a>` tags and the content of one of them with `(content)`. You can learn a lot more about Enlive transformations in this [helpful tutorial](https://github.com/cgrand/enlive/wiki/Table-and-Layout-Tutorial,-Part-1:-The-Goal).
 
 #### From Enlive structure to string
 
-Since we need to return a string and what we have is a bunch of sequences and maps, we need Enlive's function `(emit*)`, that given a structure returns a _sequence_ of strings. So I've written a small function to go directly from an Enlive data structure to a string ready to be passed to the browser!
+Since we need to return a string and what we have is a bunch of sequences and maps, we need Enlive's function `(emit*)`, that given a structure returns a _sequence_ of strings. So I've written a small function to go directly from an Enlive data structure to a string ready to be passed to the browser!
 
     (defn emit**
       "given an enlive form, returns a string"
@@ -237,15 +238,15 @@ This is what we return:
     {:headers {"Content-Type" "application/json"}
      :body (json-str {:updated updated})} 
 
-As Content-Type, we are not returning `text/html` (the default) but `application/json`. The response content is bound to `:body`. You can also specify a `:status` code.
+As Content-Type, we are not returning `text/html` (the default) but `application/json`. The response content is bound to `:body`. You can also specify a `:status` code.
 
 ## Scraping
 
 Our scraping frunctions analyze Deviantart pages and give us back information about galleries we are interested into. It is basically Clojure code and not web-related, so I'm not going to illustrate it here. 
 
-I just want to point out that once you have an html file parsed into a Clojure data structure (thanks to Enlive), it is very easy to use Enlive selectors to perform any sort of scraping. For example, in `(last-page-gallery-url)` we find the last page of the gallery from its first page with the selector `[:div.pagination :ul.pages :li.number :a]`. This gives us a list of links. We then take the `(last)` one and extract the `:href` `:attr`ibute.
+I just want to point out that once you have an html file parsed into a Clojure data structure (thanks to Enlive), it is very easy to use Enlive selectors to perform any sort of scraping. For example, in `(last-page-gallery-url)` we find the last page of the gallery from its first page with the selector `[:div.pagination :ul.pages :li.number :a]`. This gives us a list of links. We then take the `(last)` one and extract the `:href` `:attr`ibute.
 
-Similarly, to count the number of images on the last page, we `(count)` the number of items selected with `[:div#gmi-ResourceStream :img]`.
+Similarly, to count the number of images on the last page, we `(count)` the number of items selected with `[:div#gmi-ResourceStream :img]`.
 
 ## Developing and deploying
 
