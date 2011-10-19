@@ -1,0 +1,117 @@
+        body, html
+        {
+          background-color:#ccd9c8;
+          margin: 0px;
+          padding: 0px;
+          font-family: Verdana, sans-serif;
+          font-size: 13px;
+        }
+        h1
+        {
+          color:#ffffff;
+          height: 30px;
+          margin: 0px;
+          padding: 10px;
+          font-size: 30px;
+          /* http://www.colorzilla.com/gradient-editor/ */
+          background: #2b352e; /* Old browsers */
+          background: -moz-linear-gradient(top, #2b352e 0%, #6c8473 100%, #7db9e8 100%); /* FF3.6+ */
+          background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b352e), color-stop(100%,#6c8473), color-stop(100%,#7db9e8)); /* Chrome,Safari4+ */
+          background: -webkit-linear-gradient(top, #2b352e 0%,#6c8473 100%,#7db9e8 100%); /* Chrome10+,Safari5.1+ */
+          background: -o-linear-gradient(top, #2b352e 0%,#6c8473 100%,#7db9e8 100%); /* Opera 11.10+ */
+          background: -ms-linear-gradient(top, #2b352e 0%,#6c8473 100%,#7db9e8 100%); /* IE10+ */
+          background: linear-gradient(top, #2b352e 0%,#6c8473 100%,#7db9e8 100%); /* W3C */
+        }
+        #main-content
+        {
+          padding: 10px;
+        }
+        h2
+        {
+          color: #2C3635;
+          display: block;
+          font-family: tahoma, verdana, sans-serif;
+          font-size: 14px;
+          font-weight: bold;
+          height: 14px;
+          letter-spacing: 1px;
+          text-shadow: rgba(255, 255, 255, 0.597656) 0px 1px 0px;
+          margin-top: 0px;
+        }
+        input[type=submit], input[type=button]
+        {
+          /* css3buttongenerator.com */
+          font-family: Arial;
+          color: #337287;
+          font-size: 12px;
+          padding: 3px;
+          padding-left: 5px;
+          padding-right: 5px;
+          text-decoration: none;
+          -webkit-border-radius: 6px;
+          -moz-border-radius: 6px;
+          border-radius: 6px;
+          -webkit-box-shadow: 0px 1px 3px #666666;
+          -moz-box-shadow: 0px 1px 3px #666666;
+          border: solid #e6eae5 1px;
+          background: -webkit-gradient(linear, 0 0, 0 100%, from(#f1f5f0), to(#e6eae5));
+          background: -moz-linear-gradient(top, #f1f5f0, #e6eae5);
+          cursor: pointer;
+        }
+        input[type=submit]:hover, input[type=button]:hover
+        {
+          background: #e6eae5;
+        }
+        input[type=submit]
+        {
+          vertical-align: bottom;
+        }
+        input[type=text]
+        {
+          background: #a9b8a9;
+          border: 1px solid #e6eae5;
+          height: 19px;
+          margin-top: 1px;
+          vertical-align: bottom;
+          margin-bottom: 1px;
+          -moz-box-shadow: inset 0 4px 6px rgba(0,0,0,.4);
+          -webkit-box-shadow: inset 0 4px 6px rgba(0,0,0,.4);
+          box-shadow: inset 0 4px 6px rgba(0,0,0,.24);
+          -webkit-border-radius: 6px;
+          -moz-border-radius: 6px;
+          border-radius: 6px;
+          color: #2B3432;
+        }
+        h3
+        {
+          font-size: 16px;
+          letter-spacing: 1px;
+          color: #337287;
+        }
+        span.new img
+        {
+            vertical-align: center;
+            width: 12px;
+            height: 12px;
+        }
+        label
+        {
+          display: block;
+          float: left;
+          padding-top: 6px;
+        }
+        a
+        {
+          color: #337287;
+          text-decoration: none;
+          font-weight: bold;
+        }
+        a:hover
+        {
+          text-decoration: underline;
+        }
+        .delete
+        {
+          color: #3b5a4a;
+          font-weight: normal;
+        }

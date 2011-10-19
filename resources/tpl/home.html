@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Deviant Scraper</title>
+    <title>Deviant Scraper</title>    
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
     <script type="text/javascript">
         function check_updates() {
@@ -22,34 +22,33 @@
             });
         }
     </script>
+    <link rel="stylesheet" href="/scraper.css" type="text/css" media="screen">
     <style type="text/css">
-        span.new img
-        {
-            vertical-align: center;
-        }
     </style>
 </head>
 <body>
-    <h1>Deviant Scraper</h1>
-    <h2>A minimal, personal deviantart.com gallery checker</h2>
-    <div>
-        <input type="button" onclick="javascript:check_updates();" value="Check for updates" />
-    </div>
+    <h1>deviantSCRAPER</h1>
+    <div id="main-content">
+      <h2>A minimal, personal deviantart.com gallery checker</h2>
+      <div>
+          <input type="button" onclick="javascript:check_updates();" value="Check for updates" />
+      </div>
 
-    <h3>My watched galleries:</h3>
-    <div>
-        <ul id="galleries">
-            <li class="gallery"><a class="url" href="#"></a> (<a class="delete" href="#">delete</a>) <span class="new"></span></li>
-        </ul>
-    </div>
+      <h3>Galleries I follow:</h3>
+      <div>
+          <ul id="galleries">
+              <li class="gallery"><a class="url" href="#"></a> [<a class="delete" href="#">delete</a>] <span class="new"></span></li>
+          </ul>
+      </div>
 
-    <h3>Add new gallery</h3>
-    <div>
-        <div id="error-new-gallery"></div>
-        <form method="get" action="/add">
-            Gallery Url: <input type="text" name="d" />
-            <input type="Submit" value="Add" />
-        </form>
+      <h3>Add a new gallery</h3>
+      <div>
+          <div id="error-new-gallery"></div>
+          <form method="get" action="/add">
+              <label>Gallery:</label><input type="text" name="d" />
+              <input type="Submit" value="Add" />
+          </form>
+      </div>
     </div>
-</body>
+  </body>
 </html>
