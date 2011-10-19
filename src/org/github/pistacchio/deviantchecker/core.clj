@@ -114,4 +114,4 @@
 
 ;; ** server starter ** ;;
 
-(defn -main [& args] (run-jetty app {:port 9000}))
+(defn -main [& args] (run-jetty app {:port 3000}))
