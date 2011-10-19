@@ -1,4 +1,4 @@
-(defproject org.github.pistacchio.deviantchecker "0.0.1"
+(defproject org.github.pistacchio.deviantchecker "0.9.0"
   :description "A one page application for keeping track of changes on deviantart.com gallieries"
   :dependencies [[org.clojure/clojure "1.2.1"]
                  [org.clojure/clojure-contrib "1.2.0"]

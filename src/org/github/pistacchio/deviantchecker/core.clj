@@ -3,7 +3,6 @@
         ring.adapter.jetty
         org.github.pistacchio.deviantchecker.scraper
         [clojure.contrib.json :only (json-str)]
-        ring.middleware.stacktrace
         net.cgrand.enlive-html)
   (:require [compojure.route :as route]
             [compojure.handler :as handler])
