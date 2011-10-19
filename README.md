@@ -19,7 +19,7 @@ As said, this is something you can already do by registering to Deviantart and f
 
 This is how the final application looks like:
 
-![deviantSCRAPER screenshot](http://cloud.github.com/downloads/pistacchio/org.github.pistacchio.deviantchecker/app-screenshot.png) 
+![deviantSCRAPER screenshot](https://github.com/pistacchio/org.github.pistacchio.deviantchecker/raw/master/resources/public/tutorial-app-screenshot.png) 
 
 ### What you need to know
 
@@ -39,7 +39,7 @@ This starts a server running on your machine on the port 3000, so you can visit 
 
 The final project structure looks like this:
 
-![file tree](http://cloud.github.com/downloads/pistacchio/org.github.pistacchio.deviantchecker/app-tree.png)    
+![file tree](https://github.com/pistacchio/org.github.pistacchio.deviantchecker/raw/master/resources/public/tutorial-app-tree.png)    
 
 
 The heart of our application are the two Clojure files in `/src/org/github/pistacchio/deviantchecker`. `/resources` contains the static files for the page under `/resources/public`, our template files (actually only one!) in `/resources/tpl` and our "database": `/resources/data/data.dat`.
