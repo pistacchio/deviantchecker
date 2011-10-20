@@ -76,7 +76,7 @@ Apart from the obvious dependences on `org.clojure.clojure` and `org.clojure/clo
 
 ### First steps on core.clj
 
-#### Namespace, :use, :require…
+#### Namespace, :use, :require
 
 All web-related code is contained within `/src/org/github/pistacchio/deviantchecker/core.clj`. The _namespace_ part part looks like this:
 
