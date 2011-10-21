@@ -4,7 +4,8 @@
                  [org.clojure/clojure-contrib "1.2.0"]
                  [enlive  "1.0.0"]
                  [compojure "0.6.4"]
-                 [ring/ring-jetty-adapter "1.0.0-beta2"]]
+                 [ring/ring-jetty-adapter "1.0.0-beta2"]
+                 [sqlitejdbc "0.5.6"]]
   :dev-dependencies [[lein-ring "0.4.6"]]
   :ring {:handler org.github.pistacchio.deviantchecker.core/app}
   :main org.github.pistacchio.deviantchecker.core)

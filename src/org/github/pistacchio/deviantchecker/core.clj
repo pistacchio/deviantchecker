@@ -6,10 +6,9 @@
         net.cgrand.enlive-html)
   (:require [compojure.route :as route]
             [compojure.handler :as handler]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.contrib.sql :as sql])
   (:gen-class))
-
-(def *data-file* "data/data.dat")
 
 ;; ** utilities ** ;;
 (defn emit**
@@ -18,34 +17,47 @@
   (apply str (emit* tpl)))
 
 (defn get-file
-  "return the absolute path of relative-path"
+  "returns the absolute path of relative-path"
   [relative-path]
   (.getPath (io/resource relative-path)))
 
+;; constants ;;
+
+(def *db* {:classname "org.sqlite.JDBC"
+           :subprotocol "sqlite"
+           :subname (get-file "data/data.sqlite")})
+
 ;; ** data management ** ;;
-(defn load-data
+(defn load-galleries
   "returns a gallery database stored in *data-file*"
   []
-  (load-file (get-file *data-file*)))
+  (sql/with-connection *db*
+    (sql/with-query-results res ["SELECT * FROM galleries"]
+      (into [] res))))
 
-(defn save-data
-  "serializes data to *data-file* like"
-  [data]
-  (with-open [f (java.io.FileWriter. (get-file *data-file*))]
-    (print-dup (into [] data) f)))
+(sql/with-connection *db*
+    (sql/with-query-results res ["SELECT * FROM galleries"] res))
 
 (defn get-gallery
   "retrieves gallery from a map data"
-  [gallery-url data]
-  (first (filter #(= (% :href) gallery-url) data)))
+  [gallery-url]
+  (sql/with-connection *db*
+    (sql/with-query-results res ["SELECT * FROM galleries WHERE href=?" gallery-url]
+      (first res))))
 
-(defn update-data
+(defn update-or-insert-gallery
   "inserts of updates gallery into data"
-  [gallery data]
-  (let [gallery-url (gallery :href)](save-data
-    (conj
-      (remove #(= (% :href) gallery-url) data)
-      gallery))))
+  [gallery]
+  (sql/with-connection *db*
+    (sql/update-or-insert-values
+      :galleries
+      ["href=?" (gallery :href)]
+      gallery)))
+
+(defn del-gallery
+  [gallery-url]
+  (sql/with-connection *db*
+    (sql/delete-rows :galleries ["href=?" gallery-url])))
 
 ;; ** views ** ;;
 (defn get-home
@@ -53,10 +65,10 @@
  error-message may be a vector with a selector and an error message to display within it."
   [& error-message]
   (let [tpl (html-resource (java.io.File. (get-file "tpl/home.html")))
-        data (load-data)
+        data (load-galleries)
         main-transform #(transform % [:li.gallery]
                           (clone-for [g data]
-                            [:a.url] (set-attr :href (g :last-page))
+                            [:a.url] (set-attr :href (g :last_page))
                             [:a.url] (content (g :href))
                             [:a.delete] (set-attr :href (str "/delete?d=" (g :href)))))
         error-div (first error-message)
@@ -69,12 +81,11 @@
  already."
   [input]
   (if (string? input)
-    (let [current-data (load-data)
-          gallery-url (normalize-url input)]
-      (if (empty? (get-gallery gallery-url current-data)) ;; gallery hasn't been added yet
+    (let [gallery-url (normalize-url input)]
+      (if (empty? (get-gallery gallery-url)) ;; gallery hasn't been added yet
         (if-let [gallery-data (gallery-info gallery-url)] ;; can retrieve data about gallery
           (do
-            (save-data (conj current-data gallery-data))
+            (update-or-insert-gallery gallery-data)
             (get-home))
           (get-home :div#error-new-gallery "Gallery not found"))
         (get-home :div#error-new-gallery "Gallery already added.")))))
@@ -83,25 +94,25 @@
   "adds a a new gallery with gallery url to the list of galleries if gallery-url is not empty and the url is not added
  already."
   [gallery-url]
-  (let [current-data (load-data)]
-    (if (not (empty? gallery-url))
-      (save-data (remove #(= (% :href) gallery-url) current-data)))
-    (get-home)))
+  (if (not (empty? gallery-url))
+    (del-gallery gallery-url))
+    (get-home))
+
+(delete-gallery "http://mrshot.deviantart.com/gallery")
 
 (defn check-gallery
   "checks if a gallery has been updated since last check"
   [gallery]
-  (let [ data (load-data)
-         stored-gallery (get-gallery gallery data)
+  (let [ stored-gallery (get-gallery gallery)
          updated (if (seq stored-gallery) ;; gallery found
                     (let [current-gallery (gallery-info gallery)
-                          {cur-gal-last-page :last-page cur-gal-num-images :num-images} current-gallery
-                          {strd-gal-last-page :last-page strd-gal-num-images :num-images} stored-gallery]
-                      (if (and (= cur-gal-last-page strd-gal-last-page) ;; gallery unchanged
-                               (= cur-gal-num-images strd-gal-num-images))
+                          {cur-gal-last_page :last_page cur-gal-num_images :num_images} current-gallery
+                          {strd-gal-last_page :last_page strd-gal-num_images :num_images} stored-gallery]
+                      (if (and (= cur-gal-last_page strd-gal-last_page) ;; gallery unchanged
+                               (= cur-gal-num_images strd-gal-num_images))
                           "NO"
                           (do
-                            (update-data current-gallery data)
+                            (update-or-insert-gallery current-gallery)
                             "YES")))
                     "NO")]
       {:headers {"Content-Type" "application/json"}

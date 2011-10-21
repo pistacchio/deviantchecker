@@ -8,20 +8,20 @@
   [url] (-> url URL. html-resource ))
 
 ;; ** scrape methods ** ;;
-(defn- last-page-gallery-url
+(defn- last_page-gallery-url
   "returns a string with the last page for the deviantart gallery at base-url"
   [gallery-url]
-  (let [last-page-url-selector [:div.pagination :ul.pages :li.number :a]
-        last-page-url (-> (select (enlive-slurp-page gallery-url) last-page-url-selector)
+  (let [last_page-url-selector [:div.pagination :ul.pages :li.number :a]
+        last_page-url (-> (select (enlive-slurp-page gallery-url) last_page-url-selector)
                           last :attrs :href) ;; /gallery/offset=2
-        last-page-offset (if (seq last-page-url) (last (.split #"/" last-page-url)) nil)] ;; offset=2 ]
-    (str gallery-url "/" last-page-offset)))
+        last_page-offset (if (seq last_page-url) (last (.split #"/" last_page-url)) nil)] ;; offset=2 ]
+    (str gallery-url "/" last_page-offset)))
 
-(defn- images-on-last-page
+(defn- images-on-last_page
   "given the url of the last page of a gallery, returns the number of images"
-  [last-page-url]
+  [last_page-url]
   (let [image-selector [:div#gmi-ResourceStream :img]]
-    (count (select (enlive-slurp-page last-page-url) image-selector))))
+    (count (select (enlive-slurp-page last_page-url) image-selector))))
 
 ;; ** main methods ** ;;
 (defn normalize-url
@@ -49,7 +49,7 @@
  page and the number of images on the last page"
   [gallery-url]
   (try
-    (let [last-page (last-page-gallery-url gallery-url)
-          num-images (images-on-last-page last-page)]
-      {:href gallery-url :last-page last-page :num-images (str num-images)})
+    (let [last_page (last_page-gallery-url gallery-url)
+          num_images (images-on-last_page last_page)]
+      {:href gallery-url :last_page last_page :num_images (str num_images)})
   (catch java.io.FileNotFoundException e nil)))
