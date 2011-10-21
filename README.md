@@ -2,6 +2,10 @@
 
 A simple **[Compojure](https://github.com/weavejester/compojure)** application with a tutorial for learning a couple of things.
 
+## Part 1
+
+This is the first part of the tutorial. In [part two](https://github.com/pistacchio/deviantchecker/tree/db-sql) I'll show you how to add a database to this application.
+
 ## Intro
 
 When starting off with Compojure (a popular **[Clojure](https://github.com/clojure/clojure)** web microframework built on top of [Ring](https://github.com/mmcgrana/ring)), I found some nice tutorials that helped me getting started with it:
