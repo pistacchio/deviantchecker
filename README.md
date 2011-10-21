@@ -87,7 +87,8 @@ All web-related code is contained within `/src/org/github/pistacchio/deviantchec
             [clojure.contrib.json :only (json-str)]
             net.cgrand.enlive-html)
       (:require [compojure.route :as route]
-                [compojure.handler :as handler])
+                [compojure.handler :as handler]
+                [clojure.java.io :as io])
       (:gen-class))
 
 Apart from `compojure` and Ring Jetty adapter we've talked about, we are going to need:
@@ -96,6 +97,7 @@ Apart from `compojure` and Ring Jetty adapter we've talked about, we are going t
 * Enlive
 * `compojure.route` for defining the way calls to the server are handled
 * `compojure.handler` that has some utility functions we'll use.
+* `compojure.java.io` for accessing files on the file system
 
 Finally, we use `org.github.pistacchio.deviantchecker.scraper` (our functions for scraping Deviantart) and `(:gen-class)` to make a Java class out of our namespace. This, together with the definition of the main method at the end of the file `(defn -main [& args] (run-jetty app {:port 3000}))` makes possibile to specify this as the principal class for our project (remember `:main org.github.pistacchio.deviantchecker.core` in `project.clj`?)
 
@@ -161,7 +163,16 @@ We're almost done! `(route/not-found "Page not found")` will return "Page not fo
 
 We are storing all the information about Deviantart galleries in a plain text file: `/resources/data/data.dat`. In a real world application, of course, a database backend would be compulsory, but for our example this is enough.
 
+Note that “n the code I define the name of our file as `data/data.day` because _resources_ is already the default path that Leiningen uses for storing additional resources. If you pack the project as a .jar or .war, resources files would be taken out of `/resources` and deployed in the root directory of the archive.
+
 The dynamic nature of Clojure makes serialization really easy. To load our data  we use [`(load-file)`](http://clojuredocs.org/clojure_core/1.2.0/clojure.core/load-file), to store it to a file once we've modified it, we just use [`(print-dup)`](http://clojuredocs.org/clojure_core/clojure.core/print-dup). 
+
+I've written a utility function to feed those two functions with a correct path to the data file. I use the same function later on when having to retrieve a template file.
+
+    (defn get-file
+      "return the absolute path of relative-path"
+      [relative-path]
+      (.getPath (io/resource relative-path)))
 
 ### Data structure in deviantSCRAPER
 
@@ -188,7 +199,7 @@ Since we are doing some page scraping and Enlive is both a template engine and a
 
 If you look at `/resources/tpl/home.html`, you'll find out that it's just plain html. We'll take a look at `(get-home)` to see how we use Enlive. The key function call is
 
-    (html-resource (java.io.File. "resources/tpl/home.html")
+    (html-resource (java.io.File. (get-file "tpl/home.html"))
 
 This gives us back a parsed version of our html file. Basically `net.cgrand.enlive-html/html-resource` converts the html file into a Clojure structure made of sequences and maps. For example, if we parse a file like
 
@@ -281,7 +292,9 @@ and run the application like you would do with any java .jar file.
 
 You can also use `lein jar` that produces a smaller .jar by not including every dependency library, but you'll then have to tinker with the `CLASSPATH`.
 
-Leiningen can also pack it all into a _.war_ file with `lein ring war` and `lein ring uberwar` so that you can deploy it under [Tomcat](http://tomcat.apache.org/) or any other Java server supporting wars. I haven't tested this already, but when I'll do I'll update the tutorial.
+Leiningen can also pack it all into a _.war_ file with `lein ring war` and `lein ring uberwar` so that you can deploy it under [Tomcat](http://tomcat.apache.org/) or any other Java server supporting wars.
+
+I tried this under Tomcat and it worked _almost_ well. The application runs and works out of the box but with a glitch I haven't been able to overcome. When you visit `http://localhost:8080/deviantscraper` (assuming we've deployed `deviantscraper.war`), Tomcat `should` perform a 302 redirect to `http://localhost:8080/deviantscraper/` (<- note the trailing slash!). This didn't work in my environment causing the .css and .gif file not to load.
 
 ## Contact
 
