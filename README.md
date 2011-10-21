@@ -18,7 +18,7 @@ Under `resources/data` you'll find a couple of new files: `create_db.sql` (with 
 
 The database only has one table: `galleries`. The table has three text fields that just remaps those use in Part 1: `href`, `last_page` and `num_images`. Also, the data is exactly the same found in data.dat:
 
-![db data](https://github.com/pistacchio/deviantchecker/raw/master/resources/public/tutorial-app-sql.png)
+![db data](https://github.com/pistacchio/deviantchecker/raw/db-sql/resources/public/tutorial-app-sql.png)
 
 ## Setting up!
 
