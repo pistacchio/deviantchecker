@@ -51,5 +51,5 @@
   (try
     (let [last-page (last-page-gallery-url gallery-url)
           num-images (images-on-last-page last-page)]
-      {:href gallery-url :last-page last-page :num-images (str num-images)})
+      {:href gallery-url :last_page last-page :num_images (str num-images)})
   (catch java.io.FileNotFoundException e nil)))

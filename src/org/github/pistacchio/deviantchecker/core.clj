@@ -23,7 +23,7 @@
   (.getPath (io/resource relative-path)))
 
 ;; ** data management ** ;;
-(defn load-data
+(defn load-galleries
   "returns a gallery database stored in *data-file*"
   []
   (load-file (get-file *data-file*)))
@@ -53,10 +53,10 @@
  error-message may be a vector with a selector and an error message to display within it."
   [& error-message]
   (let [tpl (html-resource (java.io.File. (get-file "tpl/home.html")))
-        data (load-data)
+        data (load-galleries)
         main-transform #(transform % [:li.gallery]
                           (clone-for [g data]
-                            [:a.url] (set-attr :href (g :last-page))
+                            [:a.url] (set-attr :href (g :last_page))
                             [:a.url] (content (g :href))
                             [:a.delete] (set-attr :href (str "/delete?d=" (g :href)))))
         error-div (first error-message)
@@ -69,7 +69,7 @@
  already."
   [input]
   (if (string? input)
-    (let [current-data (load-data)
+    (let [current-data (load-galleries)
           gallery-url (normalize-url input)]
       (if (empty? (get-gallery gallery-url current-data)) ;; gallery hasn't been added yet
         (if-let [gallery-data (gallery-info gallery-url)] ;; can retrieve data about gallery
@@ -83,7 +83,7 @@
   "adds a a new gallery with gallery url to the list of galleries if gallery-url is not empty and the url is not added
  already."
   [gallery-url]
-  (let [current-data (load-data)]
+  (let [current-data (load-galleries)]
     (if (not (empty? gallery-url))
       (save-data (remove #(= (% :href) gallery-url) current-data)))
     (get-home)))
@@ -91,12 +91,12 @@
 (defn check-gallery
   "checks if a gallery has been updated since last check"
   [gallery]
-  (let [ data (load-data)
+  (let [ data (load-galleries)
          stored-gallery (get-gallery gallery data)
          updated (if (seq stored-gallery) ;; gallery found
                     (let [current-gallery (gallery-info gallery)
-                          {cur-gal-last-page :last-page cur-gal-num-images :num-images} current-gallery
-                          {strd-gal-last-page :last-page strd-gal-num-images :num-images} stored-gallery]
+                          {cur-gal-last-page :last_page cur-gal-num-images :num_images} current-gallery
+                          {strd-gal-last-page :last_page strd-gal-num-images :num_images} stored-gallery]
                       (if (and (= cur-gal-last-page strd-gal-last-page) ;; gallery unchanged
                                (= cur-gal-num-images strd-gal-num-images))
                           "NO"

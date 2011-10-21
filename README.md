@@ -179,10 +179,10 @@ I've written a utility function to feed those two functions with a correct path 
 I won't go into details about our data layer because you can easily read about it through the code. Breafly, data about galleries is stored (in memory and on the file) as a sequence of maps. Each map represents a gallery. For each gallery we store:
 
 * the base url of the gallery into the key `:href` (_http://USERNAME.deviantart.com/gallery_)
-* the url of the last page of the gallery in case of multi-pages galleries into `:last-page` (for example _http://USERNAME.deviantart.com/gallery?offset=12_)
-* the number of images on the last page into `:num-images`.
+* the url of the last page of the gallery in case of multi-pages galleries into `:last_page` (for example _http://USERNAME.deviantart.com/gallery?offset=12_)
+* the number of images on the last page into `:num_images`.
 
-Doing so, it is easy to check whenever a user of Deviantart has added new works: we just need to retrieve again the data about a certain gallery and see if `:last-page` or `:num-pages` have changed!
+Doing so, it is easy to check whenever a user of Deviantart has added new works: we just need to retrieve again the data about a certain gallery and see if `:last_page` or `:num_pages` have changed!
 
 ## Views
 
@@ -227,7 +227,7 @@ In `(get-home)` we have the following transformation:
 
     (transform % [:li.gallery]
         (clone-for [g data]
-          [:a.url] (set-attr :href (g :last-page))
+          [:a.url] (set-attr :href (g :last_page))
           [:a.url] (content (g :href))
           [:a.delete] (set-attr :href (str "/delete?d=" (g :href)))))
 
