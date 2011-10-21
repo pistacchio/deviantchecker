@@ -5,21 +5,33 @@
         [clojure.contrib.json :only (json-str)]
         net.cgrand.enlive-html)
   (:require [compojure.route :as route]
-            [compojure.handler :as handler])
+            [compojure.handler :as handler]
+            [clojure.java.io :as io])
   (:gen-class))
 
-(def *data-file* "resources/data/data.dat")
+(def *data-file* "data/data.dat")
+
+;; ** utilities ** ;;
+(defn emit**
+  "given an enlive form, returns a string"
+  [tpl]
+  (apply str (emit* tpl)))
+
+(defn get-file
+  "return the absolute path of relative-path"
+  [relative-path]
+  (.getPath (io/resource relative-path)))
 
 ;; ** data management ** ;;
 (defn load-data
   "returns a gallery database stored in *data-file*"
   []
-  (load-file *data-file*))
+  (load-file (get-file *data-file*)))
 
 (defn save-data
   "serializes data to *data-file* like"
   [data]
-  (with-open [f (java.io.FileWriter. *data-file*)]
+  (with-open [f (java.io.FileWriter. (get-file *data-file*))]
     (print-dup (into [] data) f)))
 
 (defn get-gallery
@@ -35,18 +47,12 @@
       (remove #(= (% :href) gallery-url) data)
       gallery))))
 
-;; ** utilities ** ;;
-(defn emit**
-  "given an enlive form, returns a string"
-  [tpl]
-  (apply str (emit* tpl)))
-
 ;; ** views ** ;;
 (defn get-home
   "GET /
  error-message may be a vector with a selector and an error message to display within it."
   [& error-message]
-  (let [tpl (html-resource (java.io.File. "resources/tpl/home.html"))
+  (let [tpl (html-resource (java.io.File. (get-file "tpl/home.html")))
         data (load-data)
         main-transform #(transform % [:li.gallery]
                           (clone-for [g data]
