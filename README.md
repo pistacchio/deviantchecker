@@ -163,7 +163,7 @@ We're almost done! `(route/not-found "Page not found")` will return "Page not fo
 
 We are storing all the information about Deviantart galleries in a plain text file: `/resources/data/data.dat`. In a real world application, of course, a database backend would be compulsory, but for our example this is enough.
 
-Note that “n the code I define the name of our file as `data/data.day` because _resources_ is already the default path that Leiningen uses for storing additional resources. If you pack the project as a .jar or .war, resources files would be taken out of `/resources` and deployed in the root directory of the archive.
+Note that in the code I define the name of our file as `data/data.day` because _resources_ is already the default path that Leiningen uses for storing additional resources. If you pack the project as a .jar or .war, resources files would be taken out of `/resources` and deployed in the root directory of the archive.
 
 The dynamic nature of Clojure makes serialization really easy. To load our data  we use [`(load-file)`](http://clojuredocs.org/clojure_core/1.2.0/clojure.core/load-file), to store it to a file once we've modified it, we just use [`(print-dup)`](http://clojuredocs.org/clojure_core/clojure.core/print-dup). 
 
