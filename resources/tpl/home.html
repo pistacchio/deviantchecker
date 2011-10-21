@@ -7,7 +7,7 @@
         function check_updates() {
             $('a.url').each(function(i) {
                 var link = $(this);
-                link.nextAll('span.new').html('<img src="/loading.gif" />');
+                link.nextAll('span.new').html('<img src="loading.gif" />');
 
                 $.ajax({
                     url: '/check?d=' + $(this).text(),
@@ -22,7 +22,7 @@
             });
         }
     </script>
-    <link rel="stylesheet" href="/scraper.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="scraper.css" type="text/css" media="screen">
     <style type="text/css">
     </style>
 </head>

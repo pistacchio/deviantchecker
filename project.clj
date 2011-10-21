@@ -7,4 +7,5 @@
                  [ring/ring-jetty-adapter "1.0.0-beta2"]]
   :dev-dependencies [[lein-ring "0.4.6"]]
   :ring {:handler org.github.pistacchio.deviantchecker.core/app}
-  :main org.github.pistacchio.deviantchecker.core)
+  :main org.github.pistacchio.deviantchecker.core
+  :resource-path "resources/")
