@@ -38,7 +38,8 @@
           text-shadow: rgba(255, 255, 255, 0.597656) 0px 1px 0px;
           margin-top: 0px;
         }
-        input[type=submit], input[type=button]
+        input[type=submit], input[type=button],
+        #bookmarklet
         {
           /* css3buttongenerator.com */
           font-family: Arial;

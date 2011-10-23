@@ -4,7 +4,14 @@
     <title>Deviant Scraper</title>    
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
     <script type="text/javascript">
-        function check_updates() {
+
+        $(function() {
+          var href = $('#bookmarklet').attr('href');
+          href = href.replace('CURRENT_URL', location.host);
+          $('#bookmarklet').attr('href', href);
+        });    
+    
+        function check_updates() {          
             $('a.url').each(function(i) {
                 var link = $(this);
                 link.nextAll('span.new').html('<img src="/loading.gif" />');
@@ -49,6 +56,12 @@
               <input type="Submit" value="Add" />
           </form>
       </div>
-    </div>
+      
+      <h3>Bonus bookmarklet!</h3>
+      <div>
+        <a id="bookmarklet" href="javascript:location.href=%27http://CURRENT_URL/add?d=%27%20+%20location.href;">Drag me on your toolbar!</a>
+      </div>
+      
+    </div>    
   </body>
 </html>

@@ -300,6 +300,16 @@ Leiningen can also pack it all into a _.war_ file with `lein ring war` and `lein
 
 I tried this under Tomcat and it worked _almost_ well. The application runs and works out of the box but with a glitch I haven't been able to overcome. When you visit `http://localhost:8080/deviantscraper` (assuming we've deployed `deviantscraper.war`), Tomcat `should` perform a 302 redirect to `http://localhost:8080/deviantscraper/` (<- note the trailing slash!). This didn't work in my environment causing the .css and .gif file not to load.
 
+## Bonus!
+
+On the page you'll also find a [bookmarklet](http://en.wikipedia.org/wiki/Bookmarklet) that, once dragged on the toolbar of your browser, will allow you to add galleries with a single click. Since this is not a tutorial about javascript, I won't go into details about its implementation.
+
+Suffice to say that when you click it, a javascript is executed and performs a redirect to `http://127.0.0.1:3000/add?d=CURRENT_PAGE` where `CURRENT_PAGE` is the page you're visiting (possibly a Deviantart gallery page).
+
+Since `http://127.0.0.1:3000` is our development environment and we are so lazy we don't want to change it when deployed on another environment, when the page is loaded, a tiny piece of javascript automatically makes the bookmarklet address pointing to the current deviantSCRAPER host.
+
+Note: if you're interested in bookmarklets, make sure to check [this DaringFireball article](http://daringfireball.net/2007/03/javascript_bookmarklet_builder) and the Perl script it shows.
+
 ## Contact
 
 You can contact me via mail at [pistacchio@gmail.com](mailto:pistacchio@gmail.com). Feel free to fork this little project and expand it as you wish!
